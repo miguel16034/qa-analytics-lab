@@ -102,4 +102,14 @@ Next steps
  Power BI dashboard on this data (star schema, DAX measures, alerts)
  AI QA Copilot: score interactions with an LLM against the quality form
 
+ ┌──────────────────────────────────────────────────────┐
+│  KPI: Audits │ KPI: Avg Score │ KPI: Critical % │ 🎚 Meta │
+├──────────────────────────────┬───────────────────────┤
+│  Tendencia semanal (línea)   │  Score por línea      │
+│  score vs meta               │  (barras + colores)   │
+├──────────────────────────────┼───────────────────────┤
+│  Calibración de QAs          │  Ítems más fallados   │
+│  (desviación vs equipo)      │  (barras)             │
+└──────────────────────────────┴───────────────────────┘
+
 Author: Miguel Ordoñez Torres, Quality Team Lead · LinkedIn
