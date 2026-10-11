@@ -17,9 +17,15 @@ SQLite: relational database
 SQL: JOINs, CTEs, window functions (AVG() OVER, RANK, LAG, PARTITION BY), CASE and date functions
 Git and GitHub: version control
 Data model
-lines ──< agents ──< audits >── qa_analysts
-                       │
-                       └──< audit_items >── form_items
+```
+```mermaid
+erDiagram
+    lines ||--o{ agents : "has"
+    agents ||--o{ audits : "receives"
+    qa_analysts ||--o{ audits : "performs"
+    audits ||--|{ audit_items : "contains"
+    form_items ||--o{ audit_items : "evaluated in"
+```
 Table	Description	Rows
 lines	Lines of business and their channel	6
 agents	Agents, with line, team leader and hire date	500
@@ -75,7 +81,9 @@ pip install -r requirements.txt
 
 python src/generate_data.py                          # creates data/qa_lab.db
 python src/run_query.py sql/01_overview.sql          # run any query
-Project structure
+## Project structure
+
+```
 qa-analytics-lab/
 ├── src/
 │   ├── generate_data.py      # synthetic data generator
@@ -89,6 +97,7 @@ qa-analytics-lab/
 │   ├── 06_weekly_trend_by_qa.sql   # trend per analyst (PARTITION BY)
 │   └── 07_tenure.sql               # quality by agent tenure
 └── data/                     # generated database (not tracked by Git)
+```
 Next steps
  Power BI dashboard on this data (star schema, DAX measures, alerts)
  AI QA Copilot: score interactions with an LLM against the quality form
