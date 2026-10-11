@@ -97,19 +97,46 @@ qa-analytics-lab/
 │   ├── 06_weekly_trend_by_qa.sql   # trend per analyst (PARTITION BY)
 │   └── 07_tenure.sql               # quality by agent tenure
 └── data/                     # generated database (not tracked by Git)
+│   ├── export_csv.py         # exports tables to CSV for Power BI
+├── powerbi/
+│   └── qa-dashboard.pbix     # Power BI model and dashboard
 ```
-Next steps
- Power BI dashboard on this data (star schema, DAX measures, alerts)
- AI QA Copilot: score interactions with an LLM against the quality form
 
- ┌──────────────────────────────────────────────────────┐
-│  KPI: Audits │ KPI: Avg Score │ KPI: Critical % │ 🎚 Meta │
-├──────────────────────────────┬───────────────────────┤
-│  Tendencia semanal (línea)   │  Score por línea      │
-│  score vs meta               │  (barras + colores)   │
-├──────────────────────────────┼───────────────────────┤
-│  Calibración de QAs          │  Ítems más fallados   │
-│  (desviación vs equipo)      │  (barras)             │
-└──────────────────────────────┴───────────────────────┘
+---
+
+## Power BI dashboard
+
+The same data is modeled in Power BI as a **star schema**, with `audits` as the fact table.
+
+```mermaid
+erDiagram
+    agents ||--o{ audits : "agent_id"
+    qa_analysts ||--o{ audits : "qa_id"
+    Calendar ||--o{ audits : "audit_date"
+    audits ||--|{ audit_items : "audit_id"
+    form_items ||--o{ audit_items : "item_id"
+```
+
+**Modeling decisions**
+- `lines` was merged into `agents` in Power Query, which turns a snowflake into a star.
+- A DAX `Calendar` table is marked as the date table, which enables time intelligence.
+- Foreign keys are hidden in the fact tables, so all filters come from the dimensions.
+
+**Key DAX measures**
+
+| Measure | Purpose |
+|---|---|
+| `Avg Score`, `Critical Error %`, `Item Fail %` | Core quality KPIs |
+| `Gap to Target`, `Score Status` | Distance to an adjustable target (what-if parameter, default 95) |
+| `Score Color` | Conditional formatting: on target / at risk (within 5 points) / below target |
+| `Avg Score Prev Week`, `WoW Change` | Week-over-week trend using `DATEADD` |
+
+All measures were validated against the SQL results (for example, Live Streams: 80.67 avg score and 10.9% critical errors in both tools).
+
+*Dashboard screenshots coming soon.*
+Next steps
+ - [x] Power BI dashboard on this data (star schema, DAX measures, alerts) 
+- [ ] AI QA Copilot: score interactions with an LLM against the quality form
+
 
 Author: Miguel Ordoñez Torres, Quality Team Lead · LinkedIn
