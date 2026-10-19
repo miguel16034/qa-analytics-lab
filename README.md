@@ -133,7 +133,20 @@ erDiagram
 
 All measures were validated against the SQL results (for example, Live Streams: 80.67 avg score and 10.9% critical errors in both tools).
 
-*Dashboard screenshots coming soon.*
+![QA Quality Dashboard](docs/images/dashboard.png)
+
+**What the dashboard shows**
+- **KPI cards** with the score colored against an adjustable target (default 95).
+- **Weekly trend vs target**: the operation improved about 4 points but is still about 9 points below target.
+- **Score by line of business**: Live Streams is the furthest from target, and Marketplace Safety is the only line "at risk" instead of "below target".
+- **QA calibration**: each analyst's difference from the team average, flagged at ±3 points (`REMOVEFILTERS` in DAX).
+- **Most failed items**: non-critical items fail most often, but critical items, although rarer, set the whole audit score to 0.
+
+*Filtered to Live Streams:*
+![Live Streams view](docs/images/dashboard-live-streams.png)
+
+All visuals are cross-filtered: selecting a line of business updates the trend, the calibration and the item breakdown.
+
 Next steps
  - [x] Power BI dashboard on this data (star schema, DAX measures, alerts) 
 - [ ] AI QA Copilot: score interactions with an LLM against the quality form
